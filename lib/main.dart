@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:mosigg/setting/setting1.dart';
-import 'package:mosigg/signup/signup2.dart';
-import 'package:mosigg/signup/signup3.dart';
 import 'package:provider/provider.dart';
 import 'package:mosigg/provider/replaceProvider.dart';
 import 'package:mosigg/signup/signup1.dart';
 import 'package:mosigg/login/login.dart';
 import 'package:mosigg/location/location1.dart';
-
-import 'calender/calender.dart';
 
 //void main() => runApp(MyApp());
 void main() {
@@ -36,13 +31,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          // '/': (context) => Bottomtabbar(id: 'mouse0429@naver.com', pw: 'password1234'),
           '/': (context) => LoginPage(),
           '/location1': (context) => LocationSearchPage1(
                 id: id,
               )
         }
-        // home:
         );
   }
 }

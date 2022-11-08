@@ -98,7 +98,7 @@ class _SettingidState extends State<Settingid> {
 
 Future<List> userdata(String id) async {
   final response =
-      await http.get(Uri.parse('http://10.20.10.189:8080/memberinfo/$id'));
+      await http.get(Uri.parse('http://172.30.1.24:8080/memberinfo/$id'));
   late List<User> dataList = [];
   if (response.statusCode == 200) {
     List<dynamic> json1 = jsonDecode(response.body);

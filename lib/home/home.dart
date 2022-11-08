@@ -305,7 +305,7 @@ Container pluscard() {
 
 Future<List> cardata(String id) async {
   final response =
-      await http.get(Uri.parse('http://10.20.10.189:8080/carinfo/$id'));
+      await http.get(Uri.parse('http://172.30.1.24:8080/carinfo/$id'));
   late List<Car> carList = [];
   if (response.statusCode == 200) {
     List<dynamic> json = jsonDecode(response.body);
@@ -320,7 +320,7 @@ Future<List> cardata(String id) async {
 
 Future<String> getUsingservice(String carnumber) async {
   final response =
-      await http.get(Uri.parse('http://10.20.10.189:8080/usingservice/$carnumber'));
+      await http.get(Uri.parse('http://172.30.1.24:8080/usingservice/$carnumber'));
 
   if (response.statusCode == 200) {
     String service = response.body.toString();

@@ -199,7 +199,7 @@ InkWell addrWidget(
 
 Future<List> favoriteAddr(String id) async {
   final response =
-      await http.get(Uri.parse('http://10.20.10.189:8080/favorite_addr/$id'));
+      await http.get(Uri.parse('http://172.30.1.24:8080/favorite_addr/$id'));
   late List<Addr> favoriteAddrList = [];
 
   if (response.statusCode == 200) {
@@ -216,7 +216,7 @@ Future<List> favoriteAddr(String id) async {
 Future<List> favoriteAddrdelete(
     String id, String addr, String detailAddr) async {
   final response = await http.get(Uri.parse(
-      'http://10.20.10.189:8080/favorite_addr/delete/$id/$addr/$detailAddr'));
+      'http://172.30.1.24:8080/favorite_addr/delete/$id/$addr/$detailAddr'));
   late List<Addr> favoriteAddrList = [];
   if (response.statusCode == 200) {
     return favoriteAddrList;

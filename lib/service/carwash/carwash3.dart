@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mosigg/service/carwash/carwash4.dart';
 import 'package:mosigg/service/carwash/carwash5.dart';
@@ -31,9 +33,8 @@ class CarWash3 extends StatefulWidget {
 class _CarWash3State extends State<CarWash3> {
   late String id;
   var price = 0;
-  String carNum = '102허2152'; // 차량 번호 받아와야 됨
   late var arr = widget.type.split(',');
-
+  Future<List>? data;
   @override
   void initState() {
     id = widget.id;
@@ -45,6 +46,7 @@ class _CarWash3State extends State<CarWash3> {
     else
       price = 0;
     if (temp[1] == "실내 클리닝") price += 3;
+    data = cardata(widget.id);
     super.initState();
   }
 
@@ -66,108 +68,126 @@ class _CarWash3State extends State<CarWash3> {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            text('예약 내역을 확인해주세요', 12.0, FontWeight.w400, Color(0xff9a9a9a)),
-            text('세차 서비스 예약 내역', 16.0, FontWeight.bold, Colors.black),
-            SizedBox(height: 34.0),
-            splitrow('차량번호', '102허2152'),
-            SizedBox(height: 20.0),
-            splitrow('예약일시',
-                '${widget.dateAndTime.substring(0, 4)}년 ${widget.dateAndTime.substring(5, 7)}월 ${widget.dateAndTime.substring(8, 10)}일 ${widget.dateAndTime.substring(11, 13)}:${widget.dateAndTime.substring(14, 16)}'),
-            splitrow('차량위치', '${widget.carLocation}'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                text('${widget.carDetailLocation}', 14.0, FontWeight.w400,
-                    Colors.black)
-              ],
-            ),
-            SizedBox(height: 10.0),
-            splitrow('외부 세차', '${arr[0]}'),
-            splitrow('내부 세차', '${arr[1]}'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                text('추가 요청', 14.0, FontWeight.w500, Colors.black),
-                Container(
-                  width: 271,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Flexible(
-                          child: RichText(
-                        //textAlign: TextAlign.right,
-                        text: TextSpan(
-                            text: widget.detail.length > 0 ? widget.detail : "",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400)),
-                      )),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 33),
-            Divider(
-              height: 28,
-              color: Color(0xffcbcbcb),
-              thickness: 1.0,
-            ),
-            splitrow2('예상 금액', '$price 만원'),
-            splitrow2('결제방식', '${widget.payment}'),
-            Expanded(
+      body: FutureBuilder<List>(
+          future: data,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Padding(
+                padding: EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 16.0),
                 child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      washRsrv(
-                          id,
-                          carNum,
-                          widget.dateAndTime,
-                          widget.carLocation,
-                          widget.carDetailLocation,
-                          widget.type,
-                          widget.payment,
-                          (widget.detail == '' ? '없음' : widget.detail),
-                          price)
-                        .then((result) {
-                          if(result == true) {
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    CarWash4(id: id)));
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                  CarWash5(id: id)));
-                            print("댕같이 실패");
-                          }
-                        });
-                      
-                    },
-                    child: text('예약하기', 14.0, FontWeight.w500, Colors.white),
-                    style: ElevatedButton.styleFrom(primary: Color(0xff001a5d)),
-                  ),
-                )
-              ],
-            ))
-          ],
-        ),
-      ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    text('예약 내역을 확인해주세요', 12.0, FontWeight.w400,
+                        Color(0xff9a9a9a)),
+                    text('세차 서비스 예약 내역', 16.0, FontWeight.bold, Colors.black),
+                    SizedBox(height: 34.0),
+                    splitrow('차량번호', snapshot.data![0].carnumber),
+                    SizedBox(height: 20.0),
+                    splitrow('예약일시',
+                        '${widget.dateAndTime.substring(0, 4)}년 ${widget.dateAndTime.substring(5, 7)}월 ${widget.dateAndTime.substring(8, 10)}일 ${widget.dateAndTime.substring(11, 13)}:${widget.dateAndTime.substring(14, 16)}'),
+                    splitrow('차량위치', '${widget.carLocation}'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        text('${widget.carDetailLocation}', 14.0,
+                            FontWeight.w400, Colors.black)
+                      ],
+                    ),
+                    SizedBox(height: 10.0),
+                    splitrow('외부 세차', '${arr[0]}'),
+                    splitrow('내부 세차', '${arr[1]}'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        text('추가 요청', 14.0, FontWeight.w500, Colors.black),
+                        Container(
+                          width: 271,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                  child: RichText(
+                                //textAlign: TextAlign.right,
+                                text: TextSpan(
+                                    text: widget.detail.length > 0
+                                        ? widget.detail
+                                        : "",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w400)),
+                              )),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 33),
+                    Divider(
+                      height: 28,
+                      color: Color(0xffcbcbcb),
+                      thickness: 1.0,
+                    ),
+                    splitrow2('예상 금액', '$price 만원'),
+                    splitrow2('결제방식', '${widget.payment}'),
+                    Expanded(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              washRsrv(
+                                      id,
+                                      snapshot.data![0].carnumber,
+                                      widget.dateAndTime,
+                                      widget.carLocation,
+                                      widget.carDetailLocation,
+                                      widget.type,
+                                      widget.payment,
+                                      (widget.detail == ''
+                                          ? '없음'
+                                          : widget.detail),
+                                      price)
+                                  .then((result) {
+                                if (result == true) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              CarWash4(id: id)));
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              CarWash5(id: id)));
+                                  print("댕같이 실패");
+                                }
+                              });
+                            },
+                            child: text(
+                                '예약하기', 14.0, FontWeight.w500, Colors.white),
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xff001a5d)),
+                          ),
+                        )
+                      ],
+                    ))
+                  ],
+                ),
+              );
+            } else
+              return SingleChildScrollView(
+                child: Center(
+                  child:
+                      text('등록된 차량이 없습니다', 20.0, FontWeight.bold, Colors.black),
+                ),
+              );
+          }),
     );
   }
 }
@@ -183,7 +203,7 @@ Future<bool> washRsrv(
     String detail,
     int price) async {
   final response = await http.get(Uri.parse(
-      'http://10.20.10.189:8080/wash_resrv/$id/$carNum/$dateAndTime/$carLocation/$carDetailLocation/$type/$detail/$price/$payment/'));
+      'http://172.30.1.24:8080/wash_resrv/$id/$carNum/$dateAndTime/$carLocation/$carDetailLocation/$type/$detail/$price/$payment/'));
   if (response.statusCode == 200) {
     print('세차 예약 성공 ${response.body}');
     bool result = (response.body == 'true') ? true : false;
@@ -191,5 +211,38 @@ Future<bool> washRsrv(
   } else {
     print('세차 예약 실패 ${response.statusCode}');
     return false;
+  }
+}
+
+Future<List> cardata(String id) async {
+  final response =
+      await http.get(Uri.parse('http://172.30.1.24:8080/carinfo/$id'));
+  late List<Car> carList = [];
+  if (response.statusCode == 200) {
+    List<dynamic> json = jsonDecode(response.body);
+    for (var i = 0; i < json.length; i++) {
+      carList.add(Car.fromJson(json[i]));
+    }
+    return carList;
+  } else {
+    throw Exception('Failed to load car data');
+  }
+}
+
+class Car {
+  final String cartype;
+  final String carname;
+  final String carnumber;
+  Car({
+    required this.cartype,
+    required this.carname,
+    required this.carnumber,
+  });
+  factory Car.fromJson(Map<String, dynamic> json) {
+    return Car(
+      cartype: json['model'],
+      carname: json['name'],
+      carnumber: json['number'],
+    );
   }
 }

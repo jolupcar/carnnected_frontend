@@ -313,7 +313,7 @@ Future<bool> driveRsv(
     String payment,
     int price) async {
   final response = await http.get(Uri.parse(
-      'http://10.20.10.189:8080/drive_resrv/$id/$carNum/$dateAndTime/$carLocation/$carDetailLocation/$desLocation/$desDetailLocation/$payment/$price'));
+      'http://172.30.1.24:8080/drive_resrv/$id/$carNum/$dateAndTime/$carLocation/$carDetailLocation/$desLocation/$desDetailLocation/$payment/$price'));
   if (response.statusCode == 200) {
     print('댕같이성공 ${response.body}');
     if(json.decode(response.body) == true)  return true;
@@ -325,7 +325,7 @@ Future<bool> driveRsv(
 }
 
 Future<String> loadingAction(String id, String carnumber, String time) async {
-  final response = await http.get(Uri.parse('http://10.20.10.189:8080/drive_resrv/$id/$carnumber/$time'));
+  final response = await http.get(Uri.parse('http://172.30.1.24:8080/drive_resrv/$id/$carnumber/$time'));
 
   if (response.statusCode == 200) {
     var rt = response.body.toString();
@@ -335,7 +335,7 @@ Future<String> loadingAction(String id, String carnumber, String time) async {
 }
 
 Future<String> cancelButton(String id, String carnumber, String time) async {
-  final response = await http.get(Uri.parse('http://10.20.10.189:8080/drive_cancel/$id/$carnumber/$time'));
+  final response = await http.get(Uri.parse('http://172.30.1.24:8080/drive_cancel/$id/$carnumber/$time'));
 
   if (response.statusCode == 200) {
     var rt = response.body.toString();

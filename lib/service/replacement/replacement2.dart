@@ -539,7 +539,7 @@ Widget listview2(itemcount, listname, type) {
 
 Future<List> getItemList() async {
   final response =
-      await http.get(Uri.parse('http://10.20.10.189:8080/replace_item/list'));
+      await http.get(Uri.parse('http://172.30.1.24:8080/replace_item/list'));
   late List<ItemList> itemList = [];
 
   if (response.statusCode == 200) {

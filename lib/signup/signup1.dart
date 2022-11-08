@@ -214,7 +214,7 @@ class _SignUpState extends State<SignUp1> {
 
 Future<bool> idcheck(String id) async {
   final response =
-      await http.get(Uri.parse('http://10.20.10.189:8080/signup/$id'));
+      await http.get(Uri.parse('http://172.30.1.24:8080/signup/$id'));
   if (response.statusCode == 200) {
     if (json.decode(response.body) == true)
       return false; // 아이디 사용 불가(중복된 아이디)

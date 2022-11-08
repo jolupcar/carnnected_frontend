@@ -25,7 +25,7 @@ class _Delivery5State extends State<Delivery5> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
-        title: text('주유 서비스 예약', 16.0, FontWeight.w500, Colors.black),
+        title: text('딜리버리 서비스 예약', 16.0, FontWeight.w500, Colors.black),
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 80.0),

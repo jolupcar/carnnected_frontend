@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mosigg/components.dart';
 import 'package:mosigg/map/common/tabbarWidget.dart';
 
 class MapPage extends StatefulWidget {
@@ -19,15 +20,12 @@ class MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> markers = {};
   late Uint8List markerIcon;
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.62014, 127.05969),
-    zoom: 14.4746,
-  );
+  late CameraPosition markerCam;
 
   @override
   void initState(){
     super.initState();
+    markerCam = CameraPosition(target: LatLng(widget.location.y, widget.location.x), zoom: 17);
     setCustomMapPin();
   }
 
@@ -45,10 +43,24 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+        title: text('위치 확인', 16.0, FontWeight.w500, Colors.black),
+        toolbarHeight: 56.0,
+        centerTitle: true,
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
+      ),
       body: GoogleMap(
         mapType: MapType.normal,
         markers: markers,
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: markerCam,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
 
@@ -56,7 +68,7 @@ class MapPageState extends State<MapPage> {
             markers.add(
               Marker(
                 markerId: MarkerId('서비스'),
-                position: LatLng(widget.location.x, widget.location.y),
+                position: LatLng(widget.location.y, widget.location.x),
                 icon: BitmapDescriptor.fromBytes(markerIcon)
               )
             );

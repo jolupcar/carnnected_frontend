@@ -234,7 +234,7 @@ Future<List> getFixinfo(LatLng addr) async {
   late List<FIX> fixList = [];
 
   final responseCrawling = await http.get(Uri.parse(
-      'http://10.20.10.189:8080/map/카센터/${addr.latitude}/${addr.longitude}'));
+      'http://172.30.1.24:8080/map/카센터/${addr.latitude}/${addr.longitude}'));
 
   if (responseCrawling.statusCode == 200) {
     List<dynamic> jsonCrawl = jsonDecode(responseCrawling.body);
